@@ -1,8 +1,9 @@
 import sys, os
+import pickle
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
-from reportlab.lib.pagesizes import A5
+from reportlab.lib.pagesizes import A6
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph
 
@@ -14,7 +15,7 @@ def generate_pdf(story, existing_canvas=None):
     styleSheet = getSampleStyleSheet()
     style = styleSheet['BodyText']
 
-    c = existing_canvas or canvas.Canvas(OUT_FILENAME, pagesize=A5)
+    c = existing_canvas or canvas.Canvas(OUT_FILENAME, pagesize=A6)
     #c.setFont("Helvetica", 28)
     # draw some lines
     #a5 is 210 mm * 148 mm
@@ -49,14 +50,31 @@ def process_stories(stories):
     canvas.save()
     print "Stories saved to %s" % OUT_FILENAME
 
+def get_stories(api_token):
+    client = PivotalClient(token=None, cache='/tmp')
+    client.token = api_token
+    projects = client.projects.all()['projects']
+    iterations = client.iterations.current(projects[0]['id'])['iterations']
+    stories = iterations[0]['stories']
+    return [x for x in stories if x['current_state'] != 'accepted']
+
 def print_stories():
     if len(sys.argv) != 2:
         print "Usage: print-stories API-KEY"
         return
-    client = PivotalClient(token=None, cache='path/to/cache')
-    client.token = sys.argv[1]
-    projects = client.projects.all()['projects']
-    iterations = client.iterations.current(projects[0]['id'])['iterations']
-    stories = iterations[0]['stories']
-    stories = [x for x in stories if x['current_state'] != 'accepted']
+    stories = get_stories(sys.argv[1])
+    process_stories(stories)
+
+def save_stories():
+    if len(sys.argv) != 2:
+        print "Usage: save-stories API-KEY"
+        return
+    stories = get_stories(sys.argv[1])
+    with open('stories.pickle', 'wb') as pickle_file:
+        pickle_file.write(pickle.dumps(stories))
+    print "Wrote stories to stories.pickle"
+
+def print_from_file():
+    with open('stories.pickle', 'rb') as pickle_file:
+        stories = pickle.loads(pickle_file.read())
     process_stories(stories)

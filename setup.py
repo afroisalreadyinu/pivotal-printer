@@ -7,5 +7,7 @@ setup(
     install_requires = ["reportlab==2.6", "busyflow.pivotal==0.3.4", "httplib2"],
     packages=find_packages(),
     zip_safe=False,
-    entry_points = {'console_scripts': ['print-stories = pivotal_printer:print_stories']}
+    entry_points = {'console_scripts': ['print-stories = pivotal_printer:print_stories',
+                                        'save-stories =  pivotal_printer:save_stories',
+                                        'print-from-file =  pivotal_printer:print_from_file']}
 )
