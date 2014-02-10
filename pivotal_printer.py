@@ -10,7 +10,9 @@ from reportlab.platypus import Paragraph
 from busyflow.pivotal import PivotalClient
 
 OUT_FILENAME = 'stories.pdf'
-
+MAX_DESC = 200
+PIVOTAL_KEY_FILE = "~/.pivotal_key"
+PICKLE_FILE = 'stories.pickle'
 def generate_pdf(story, existing_canvas=None):
     styleSheet = getSampleStyleSheet()
     style = styleSheet['BodyText']
@@ -47,7 +49,6 @@ def generate_pdf(story, existing_canvas=None):
     style.fontSize = 14
     style.leading = 16
     description_text = story['description']
-    MAX_DESC = 200
     if len(description_text) > MAX_DESC:
         description_text = description_text[:MAX_DESC] + "..."
     description = Paragraph(description_text, style)
@@ -83,20 +84,20 @@ def get_stories(api_token):
     return [x for x in stories if x['current_state'] != 'accepted']
 
 def print_stories():
-    with open(os.path.expanduser("~/.pivotal_key")) as key_file:
+    with open(os.path.expanduser(PIVOTAL_KEY_FILE)) as key_file:
         api_key = key_file.read().strip()
     stories = get_stories(api_key)
     process_stories(stories)
 
 def save_stories():
-    with open(os.path.expanduser("~/.pivotal_key")) as key_file:
+    with open(os.path.expanduser(PIVOTAL_KEY_FILE)) as key_file:
         api_key = key_file.read().strip()
     stories = get_stories(api_key)
-    with open('stories.pickle', 'wb') as pickle_file:
+    with open(PICKLE_FILE, 'wb') as pickle_file:
         pickle_file.write(pickle.dumps(stories))
-    print "Wrote stories to stories.pickle"
+    print "Wrote stories to %s" % PICKLE_FILE
 
 def print_from_file():
-    with open('stories.pickle', 'rb') as pickle_file:
+    with open(PICKLE_FILE, 'rb') as pickle_file:
         stories = pickle.loads(pickle_file.read())
     process_stories(stories)

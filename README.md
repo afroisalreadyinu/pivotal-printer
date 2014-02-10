@@ -14,8 +14,10 @@ Installation and Usage
 3. Run `python setup.py develop`. This should install the
 dependencies.
 
-4. Run `print-stories "API-KEY"`. You can find your API-KEY in the
-Profile section of Pivotal Tracker.
+4. Get your Pivotal Tracker API key. You can find it in the Profile
+section.
+
+5. Run `print-stories`.
 
 Your stories should now be saved in `stories.pdf` in the same
 directory, ready for printing.
@@ -23,12 +25,8 @@ directory, ready for printing.
 TODO
 ----
 
-* Add Ticket ID, status, assigned to, created on.
-
-* Cut description if it's too long.
+* Add Ticket ID, assigned to.
 
 * Improve formatting
-
-* Read from `.pivotal_key` file if no key is provided.
 
 * Orientation is wrong
