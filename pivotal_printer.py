@@ -46,24 +46,18 @@ def generate_pdf(story, existing_canvas=None):
     status.wrap(13*cm, 9*cm)
     status.drawOn(c, 1*cm, -7*cm)
 
-    style.fontSize = 14
+    style.fontSize = 16
     style.leading = 16
-    description_text = story['description']
-    if len(description_text) > MAX_DESC:
-        description_text = description_text[:MAX_DESC] + "..."
-    description = Paragraph(description_text, style)
-    description.wrap(13*cm, 9*cm)
-    description.drawOn(c, 1*cm, -6*cm)
+    id_text = "ID: %s" % story['id']
+    id_paragraph = Paragraph(id_text, style)
+    id_paragraph.wrap(13*cm, 9*cm)
+    id_paragraph.drawOn(c, 1*cm, -6*cm)
 
-    style.fontSize = 18
-    style.leading = 18
+    style.fontSize = 24
+    style.leading = 26
     title = Paragraph(story['name'], style)
-
     title.wrap(13*cm, 2*cm)
-    title.drawOn(c, 1*cm, -2.5*cm)
-
-    # c.drawString(2*cm, -3*cm, "%s [%d points]" % (story['Subject'],
-    #                                               int(float(story['Story points']))))
+    title.drawOn(c, 1*cm, -4*cm)
 
     c.showPage()
     return c
