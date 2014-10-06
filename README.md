@@ -17,10 +17,16 @@ dependencies.
 4. Get your Pivotal Tracker API key. You can find it in the Profile
 section. Save it in `~/.pivotal_key`.
 
-5. Run `print-stories`.
+5. Run `print-stories FMT`. The argument `FMT` can be one of `pdf` or
+`html`; if ommitted, the default is `pdf`.
 
-Your stories should now be saved in `stories.pdf` in the same
-directory, ready for printing.
+Your stories should now be saved in `stories.pdf` or `stories.html` in
+the same directory, ready for printing.
+
+If the `FMT` argument is used, `reportlab` is used for pdf
+generation. If it's `html`, simple string templating is used for
+generating a HTML page. The template used for tis purpose is
+`stories.html.tmpl`; you can change it to suit your needs.
 
 TODO
 ----
