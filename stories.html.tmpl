@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <style>
+      body {
+      font-family: verdana, sans-serif;
+      width: 680px;
+      height: 842px;
+      }
+
+      div.story {
+      width: 310px;
+      height: 220px;
+      float: left;
+      border: 1px solid black;
+      margin-left: 10px;
+      margin-top: 10px;
+      padding: 5px;
+      }
+
+      div.name {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 5px;
+      }
+      div.info {
+      fint-size: 14px;
+      float: left;
+      width: 70%;
+      }
+      div.index {
+      float: left;
+      font-size: 24px;
+      padding: 20px;
+      padding-top:15px;
+      width:20px;
+      height:20px;
+      border: 1px solid black;
+      border-radius: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    {% for story in stories %}
+    <div class="story">
+      <div class="name">{{ story.name }}</div>
+      <div class="info">
+        <label for="id">ID:</label> <span id="id">{{story.id}}</span>
+        <br>
+        <label for="status">Status:</label> <span id="status">{{story.current_state}}</span>
+        <br>
+        <label for="created_on">Created on:</label>
+        <span id="created_on">{{story.created_at.strftime("%d.%m.%Y")}}</span>
+        <br>
+        <label for="estimate">Estimate:</label>
+        <span id="estimate">{{story.estimate}}</span>
+      </div>
+
+      <div class="index">{{story.index}}</div>
+    </div>
+    {% endfor %}
+  </body>
+</html>
