@@ -15,7 +15,7 @@ Installation and Usage
 dependencies.
 
 4. Get your Pivotal Tracker API key. You can find it in the Profile
-section.
+section. Save it in `~/.pivotal_key`.
 
 5. Run `print-stories`.
 
