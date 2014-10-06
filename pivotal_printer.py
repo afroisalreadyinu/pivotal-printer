@@ -23,6 +23,7 @@ class PdfPrinter(object):
     def print_stories(self):
         for story in self.stories:
             self.print_story(story)
+        self.canvas.save()
 
     def print_story(self, story):
         styleSheet = getSampleStyleSheet()
