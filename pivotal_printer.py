@@ -15,6 +15,7 @@ OUT_FILENAME = 'stories'
 MAX_DESC = 200
 PIVOTAL_KEY_FILE = "~/.pivotal_key"
 PICKLE_FILE = 'stories.pickle'
+CARDS_PP = 4
 
 class HtmlPrinter(object):
 
@@ -22,7 +23,18 @@ class HtmlPrinter(object):
         self.stories = stories
         self.filename = filename
 
-    def print_stories(self):
+    def _collate(self):
+        no_pages = 1 + len(self.stories) / CARDS_PP
+        new_stories = [None for _ in range(no_pages*CARDS_PP)]
+        for index,story in enumerate(self.stories):
+            new_index = (index % no_pages)*CARDS_PP + (index/no_pages)
+            print "%d: %d" % (index, new_index)
+            new_stories[new_index] = story
+        self.stories = new_stories
+
+    def print_stories(self, collate=False):
+        if collate:
+            self._collate()
         template_path = os.path.abspath(os.path.join(__file__, "../stories.html.tmpl"))
         with open(template_path, 'r') as template_file:
             template = jinja2.Template(template_file.read())
@@ -86,14 +98,14 @@ class PdfPrinter(object):
 
         self.canvas.showPage()
 
-def process_stories(stories, print_format):
+def process_stories(stories, print_format, collate):
     out_file = OUT_FILENAME + "." + print_format
     if print_format == 'pdf':
         printer = PdfPrinter(stories, out_file)
         printer.print_stories()
     elif print_format == 'html':
         printer = HtmlPrinter(stories, out_file)
-        printer.print_stories()
+        printer.print_stories(collate=collate)
     print "Stories saved to %s" % out_file
 
 def get_stories(api_token):
@@ -117,7 +129,7 @@ def print_stories():
     with open(os.path.expanduser(PIVOTAL_KEY_FILE)) as key_file:
         api_key = key_file.read().strip()
     stories = get_stories(api_key)
-    process_stories(stories, print_format)
+    process_stories(stories, print_format, "--collate" in sys.argv)
 
 def save_stories():
     with open(os.path.expanduser(PIVOTAL_KEY_FILE)) as key_file:
@@ -132,4 +144,4 @@ def print_from_file():
     assert print_format in ['pdf', 'html'], PRINT_FORMAT_ERROR
     with open(PICKLE_FILE, 'rb') as pickle_file:
         stories = pickle.loads(pickle_file.read())
-    process_stories(stories, print_format)
+    process_stories(stories, print_format, "--collate" in sys.argv)

@@ -42,6 +42,7 @@
   </head>
   <body>
     {% for story in stories %}
+    {% if not story is none %}
     <div class="story">
       <div class="name">{{ story.name }}</div>
       <div class="info">
@@ -58,6 +59,9 @@
 
       <div class="index">{{story.index}}</div>
     </div>
+    {% else %}
+    <div class="story"></div>
+    {% endif %}
     {% endfor %}
   </body>
 </html>
