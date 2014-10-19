@@ -28,7 +28,6 @@ class HtmlPrinter(object):
         new_stories = [None for _ in range(no_pages*CARDS_PP)]
         for index,story in enumerate(self.stories):
             new_index = (index % no_pages)*CARDS_PP + (index/no_pages)
-            print "%d: %d" % (index, new_index)
             new_stories[new_index] = story
         self.stories = new_stories
 
