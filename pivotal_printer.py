@@ -39,7 +39,7 @@ class HtmlPrinter(object):
             template = jinja2.Template(template_file.read())
         rendered = template.render(stories=self.stories)
         with open(self.filename, 'w') as outfile:
-            outfile.write(rendered)
+            outfile.write(rendered.encode('utf-8'))
 
 class PdfPrinter(object):
 
